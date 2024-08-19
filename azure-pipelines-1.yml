@@ -1,6 +1,3 @@
-# Node.js
-
-
 trigger:
 - main
 
@@ -10,17 +7,22 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '16.x'  # Consider upgrading to a more recent version of Node.js
   displayName: 'Install Node.js'
+
 - task: BrowserStackConfig@0
   inputs:
     BrowserStackServiceEndPoint: 'new connection cg'
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-- script: |
-    npm install
-    npm install cypress --save-dev
-    npm install browserstack-cypress-cli
-    browserstack-cypress run 
-  displayName: 'npm install and build'
+  displayName: 'Configure BrowserStack'
+
+- script: npm install
+  displayName: 'Install npm dependencies'
+
+- script: npm install cypress --save-dev
+  displayName: 'Install Cypress'
+
+- script: npm install browserstack-cypress-cli
+  displayName: 'Install BrowserStack Cypress CLI'
+
+- script: browserstack-cypress run
+  displayName: 'Run Cypress tests on BrowserStack'
