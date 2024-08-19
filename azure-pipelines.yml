@@ -1,5 +1,5 @@
 # Starter pipeline
-- task: BrowserStackConfig@0
+ task: BrowserStackConfig@0
   inputs:
     BrowserStackServiceEndPoint: 'new connection cg'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
