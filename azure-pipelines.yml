@@ -1,4 +1,7 @@
 # Starter pipeline
+- task: BrowserStackConfig@0
+  inputs:
+    BrowserStackServiceEndPoint: 'new connection cg'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
