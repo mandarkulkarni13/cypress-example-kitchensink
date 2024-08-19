@@ -17,6 +17,5 @@ steps:
   inputs:
     BrowserStackServiceEndPoint: 'new connection cg'
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
+    browserstack-cypress run 
   displayName: 'Run a multi-line script'
