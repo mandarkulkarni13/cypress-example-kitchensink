@@ -20,8 +20,8 @@ steps:
   displayName: 'Install BrowserStack Cypress CLI'
 
 - script: |
-    browserstack-cypress init
-    browserstack-cypress run --sync
+    npm browserstack-cypress init
+    npx browserstack-cypress --config-file "browserstack.test.json" run --sync
   displayName: 'Run Cypress tests on BrowserStack Automate'
 
 - script: |
