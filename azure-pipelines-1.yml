@@ -33,4 +33,8 @@ steps:
 - script: browserstack-cypress run --sync
   displayName: 'Run Cypress tests on BrowserStack'
 
+- task: BrowserStackResults@1
+  inputs:
+    browserstackProduct: 'automate'
+
 - task: BrowserStackStopLocal@0
