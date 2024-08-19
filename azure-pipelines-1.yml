@@ -1,25 +1,14 @@
 trigger:
-
-- main
+  - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: 'Default' # Use your self-hosted agent pool name
 
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '16.x'  # Consider upgrading to a more recent version of Node.js
+    versionSpec: '16.x'  # Upgrade Node.js version if needed
   displayName: 'Install Node.js'
-
-- task: BrowserStackConfig@0
-  inputs:
-    BrowserStackServiceEndPoint: 'new connection cg'
-  displayName: 'Configure BrowserStack'
-- task: BrowserStackConfig@0
-  inputs:
-    BrowserStackServiceEndPoint: 'new connection cg'
-    browserstackLocal: true
-
 
 - script: npm install
   displayName: 'Install npm dependencies'
@@ -30,11 +19,11 @@ steps:
 - script: npm install browserstack-cypress-cli
   displayName: 'Install BrowserStack Cypress CLI'
 
-- script: browserstack-cypress run --sync
-  displayName: 'Run Cypress tests on BrowserStack'
+- script: |
+    browserstack-cypress init
+    browserstack-cypress run --sync
+  displayName: 'Run Cypress tests on BrowserStack Automate'
 
-- task: BrowserStackResults@1
-  inputs:
-    browserstackProduct: 'automate'
-
-- task: BrowserStackStopLocal@0
+- script: |
+    browserstack-cypress generate-report
+  displayName: 'Generate BrowserStack Test Report'
