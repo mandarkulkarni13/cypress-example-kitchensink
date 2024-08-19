@@ -1,29 +1,58 @@
 trigger:
-  - main
+  - none
+
+pr:
+  - none
+
+parameters:
+  - name: Environment
+    displayName: Select Environment
+    type: string
+    default: TEST
+    values:
+      - TEST
+      - QA1
 
 pool:
-  vmImage: ubuntu-latest # Use your self-hosted agent pool name
+  vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'  # Upgrade Node.js version if needed
-  displayName: 'Install Node.js'
+stages:
+  - stage: TEST
+    displayName: UI tests on BrowserStack
+    condition: eq('${{ parameters.Environment }}', 'TEST')
+    jobs:
+      - job: EXECUTION1
+        timeoutInMinutes: 140
+        displayName: EXECUTION
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: "inline"
+              script: |
+                npm install -g browserstack-cypress-cli
+                npx browserstack-cypress --config-file "browserstack.test.json" run --sync --env grepTags=${env:TAG1}
+                exit $LASTEXITCODE
+              errorActionPreference: "silentlyContinue"
+              warningPreference: "silentlyContinue"
+              informationPreference: "silentlyContinue"
+              verbosePreference: "silentlyContinue"
+              debugPreference: "silentlyContinue"
 
-- script: npm install
-  displayName: 'Install npm dependencies'
-
-- script: npm install cypress --save-dev
-  displayName: 'Install Cypress'
-
-- script: npm install browserstack-cypress-cli
-  displayName: 'Install BrowserStack Cypress CLI'
-
-- script: |
-    npm browserstack-cypress init
-    npx browserstack-cypress --config-file "browserstack.test.json" run --sync
-  displayName: 'Run Cypress tests on BrowserStack Automate'
-
-- script: |
-    browserstack-cypress generate-report
-  displayName: 'Generate BrowserStack Test Report'
+      - job: EXECUTION2
+        dependsOn: EXECUTION1
+        condition: succeededOrFailed()
+        timeoutInMinutes: 140
+        displayName: EXECUTION
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: "inline"
+              script: |
+                npm install -g browserstack-cypress-cli
+                npx browserstack-cypress --config-file "browserstack.test.json" run --sync --env grepTags=${env:TAG2}
+                exit $LASTEXITCODE
+              errorActionPreference: "silentlyContinue"
+              warningPreference: "silentlyContinue"
+              informationPreference: "silentlyContinue"
+              verbosePreference: "silentlyContinue"
+              debugPreference: "silentlyContinue"
