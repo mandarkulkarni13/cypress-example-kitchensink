@@ -20,6 +20,7 @@ steps:
     BrowserStackServiceEndPoint: 'new connection cg'
     browserstackLocal: true
 
+
 - script: npm install
   displayName: 'Install npm dependencies'
 
@@ -31,3 +32,5 @@ steps:
 
 - script: browserstack-cypress run --sync
   displayName: 'Run Cypress tests on BrowserStack'
+
+- task: BrowserStackStopLocal@0
